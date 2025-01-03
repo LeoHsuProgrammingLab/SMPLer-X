@@ -11,6 +11,7 @@ main/vis*
 tool/AGORA/vis*
 tool/SHAPY/vis*
 demo/
+logs/
 *egg-info/
 .idea/
 data/SHAPY/mesh-mesh-intersection/build/

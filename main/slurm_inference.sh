@@ -26,6 +26,10 @@ ffmpeg -i ../demo/videos/${INPUT_VIDEO}.${FORMAT} -f image2 -vf fps=${FPS}/1 -qs
 end_count=$(find "$IMG_PATH" -type f | wc -l)
 echo $end_count
 
+mkdir -p ../logs
+WALL_TIME="05:00:00"
+MEMORY="32G"
+
 # inference
 PYTHONPATH="$(dirname $0)/..":$PYTHONPATH \
 srun -p ${PARTITION} \
@@ -34,6 +38,9 @@ srun -p ${PARTITION} \
     --ntasks=${GPUS} \
     --ntasks-per-node=${GPUS_PER_NODE} \
     --cpus-per-task=${CPUS_PER_TASK} \
+    --time=${WALL_TIME} \
+    --mem=${MEMORY} \
+    --output=../logs/${JOB_NAME}.%j.out \
     --kill-on-bad-exit=1 \
     ${SRUN_ARGS} \
     python inference.py \
@@ -43,7 +50,7 @@ srun -p ${PARTITION} \
     --agora_benchmark agora_model \
     --img_path ${IMG_PATH} \
     --start 1 \
-    --end  $end_count \
+    --end $end_count \
     --output_folder ${SAVE_DIR} \
     --show_verts \
     --show_bbox \
@@ -51,7 +58,6 @@ srun -p ${PARTITION} \
     # --multi_person \
     # --iou_thr 0.2 \
     # --bbox_thr 20
-
 
 # images to video
 ffmpeg -y -f image2 -r ${FPS} -i ${SAVE_DIR}/img/%06d.jpg -vcodec mjpeg -qscale 0 -pix_fmt yuv420p ../demo/results/${INPUT_VIDEO}.mp4

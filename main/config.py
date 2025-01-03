@@ -14,7 +14,7 @@ class Config:
         self.cur_dir = osp.dirname(os.path.abspath(__file__))
         self.root_dir = osp.join(self.cur_dir, '..')
         self.data_dir = osp.join(self.root_dir, 'dataset')
-        self.human_model_path = osp.join(self.root_dir, 'common', 'utils', 'human_model_files')
+        self.human_model_path = osp.join(self.root_dir, 'common', 'utils', 'human_model_files') # https://github.com/caizhongang/SMPLer-X/issues/22#issuecomment-1811920690
 
         ## add some paths to the system root dir
         sys.path.insert(0, osp.join(self.root_dir, 'common'))
